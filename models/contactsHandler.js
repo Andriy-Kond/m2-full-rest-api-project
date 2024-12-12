@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
+import { nanoid } from "nanoid";
 
 // __dirname starting with Node.js 20.11/21.2:
 const __dirname = import.meta.dirname;
@@ -21,7 +22,7 @@ const getContactById = async id => {
 
 const addContact = async newContact => {
   const contacts = await getContacts();
-  contacts.push(newContact);
+  contacts.push({ id: nanoid(), ...newContact });
   const updatedContacts = JSON.stringify(contacts, null, 2);
   fs.writeFile(__filename, updatedContacts);
 

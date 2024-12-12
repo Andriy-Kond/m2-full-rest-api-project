@@ -10,7 +10,9 @@ contactsRouter.get("/", async (req, res, next) => {
 
     res.json(contacts);
   } catch (error) {
-    next(error);
+    // return res.status(500).json({ message: "Server error" });
+    const { status = 500, message = "Server error" } = error;
+    return res.status(status).json({ message });
   }
 });
 
@@ -30,39 +32,48 @@ contactsRouter.get("/:id", async (req, res, next) => {
 
     res.json(contact);
   } catch (error) {
-    //$ opt1
     // return res.status(500).json({ message: "Server error" });
-    //$ opt2
-    // const { status = 500, message = "Server error" } = error;
-    // return res.status(status).json({ message });
-    //$ opt3
-    next(error); // will looking for handler (app.use() in app.js) that have 4 arguments (first - will be the error)
+
+    const { status = 500, message = "Server error" } = error;
+
+    // HttpError({ status: 500, message: "Server error" });
+
+    return res.status(status).json({ message });
   }
 });
 
 contactsRouter.post("/", async (req, res, next) => {
   try {
     const newContact = await contactsHandler.addContact(req.body);
-    res.status(201).json(newContact); // successfully add new entry
+
+    res.json(newContact);
   } catch (error) {
-    next(error);
+    // return res.status(500).json({ message: "Server error" });
+    const { status = 500, message = "Server error" } = error;
+    return res.status(status).json({ message });
   }
 });
 
 contactsRouter.put("/:id", async (req, res, next) => {
   try {
     const editedContact = await contactsHandler.editContact(req.body);
+
     res.json(editedContact);
   } catch (error) {
-    next(error);
+    // return res.status(500).json({ message: "Server error" });
+    const { status = 500, message = "Server error" } = error;
+    return res.status(status).json({ message });
   }
 });
 
 contactsRouter.delete("/:id", async (req, res, next) => {
   try {
     const removedContact = await contactsHandler.removeContact(req.params.id);
+
     res.json(removedContact);
   } catch (error) {
-    next(error);
+    // return res.status(500).json({ message: "Server error" });
+    const { status = 500, message = "Server error" } = error;
+    return res.status(status).json({ message });
   }
 });
