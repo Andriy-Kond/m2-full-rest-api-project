@@ -22,7 +22,9 @@ const getContactById = async id => {
 
 const addContact = async newContact => {
   const contacts = await getContacts();
-  contacts.push({ id: nanoid(), ...newContact });
+  const id = nanoid();
+  contacts.push({ id, ...newContact });
+
   const updatedContacts = JSON.stringify(contacts, null, 2);
   fs.writeFile(__filename, updatedContacts);
 
@@ -33,16 +35,18 @@ const editContact = async newContact => {
   const contacts = await getContacts();
 
   const idx = contacts.findIndex(contact => contact.id === newContact.id);
+  if (idx === -1) return null;
+
   contacts[idx] = newContact;
 
   const updatedContactsString = JSON.stringify(contacts, null, 2);
   fs.writeFile(__filename, updatedContactsString);
 
-  return newContact || null;
+  return contacts[idx];
 };
 
 // less speed option:
-const editContactByReduceNotModifyArr = async newContact => {
+const editContact_ByReduce_NotModifyArr = async newContact => {
   const contacts = getContacts();
 
   const { wantedContact, updatedContacts } = contacts.reduce(

@@ -1,9 +1,7 @@
 import express from "express";
-import logger from "morgan"; // HTTP request logger middleware for node.js
-import cors from "cors"; // Enable CORS: allows cross-requests from different addresses.
+import logger from "morgan";
+import cors from "cors";
 import { contactsRouter } from "./routes/api/contactsRouter.js";
-// import { HttpError } from "./utils/HttpError.js";
-import Joi from "joi"; // check request body: schema description language and data validator
 
 export const app = express();
 
